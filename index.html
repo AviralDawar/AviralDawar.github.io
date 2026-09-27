@@ -1,0 +1,483 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Aviral Dawar</title>
+<meta name="description" content="Aviral Dawar — backend and AI/ML engineer at Oracle Database Group, Bengaluru.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=IBM+Plex+Sans:ital,wght@0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --ground:#F1F4F3;
+  --surface:#FFFFFF;
+  --ink:#121A19;
+  --muted:#58645F;
+  --faint:#8A9591;
+  --rule:#D3DBD8;
+  --accent:#2A52C4;
+  --accent-soft:#E3E9FA;
+  --wip:#9A5B00;
+  --wip-soft:#F7ECDA;
+  --display:"Bricolage Grotesque","Avenir Next","Segoe UI",system-ui,sans-serif;
+  --body:"IBM Plex Sans","Segoe UI",system-ui,-apple-system,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --ground:#0E1413;
+    --surface:#151D1C;
+    --ink:#E4EBE8;
+    --muted:#9AA7A3;
+    --faint:#6E7B77;
+    --rule:#27322F;
+    --accent:#93AAFF;
+    --accent-soft:#1B2442;
+    --wip:#E9B25E;
+    --wip-soft:#2E2413;
+  }
+}
+:root[data-theme="dark"]{
+  color-scheme:dark;
+  --ground:#0E1413;
+  --surface:#151D1C;
+  --ink:#E4EBE8;
+  --muted:#9AA7A3;
+  --faint:#6E7B77;
+  --rule:#27322F;
+  --accent:#93AAFF;
+  --accent-soft:#1B2442;
+  --wip:#E9B25E;
+  --wip-soft:#2E2413;
+}
+
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+@media (prefers-reduced-motion: reduce){html{scroll-behavior:auto}}
+body{
+  margin:0;
+  background:var(--ground);
+  color:var(--ink);
+  font-family:var(--body);
+  font-size:16px;
+  line-height:1.6;
+  -webkit-font-smoothing:antialiased;
+}
+a{color:var(--accent);text-decoration-thickness:1px;text-underline-offset:3px}
+a:hover{text-decoration-thickness:2px}
+a:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:2px}
+
+.wrap{max-width:1080px;margin:0 auto;padding-inline:24px}
+@media (max-width:520px){.wrap{padding-inline:16px}}
+
+/* top bar */
+.bar{
+  position:sticky;top:env(safe-area-inset-top,0px);z-index:5;
+  background:color-mix(in srgb,var(--ground) 88%,transparent);
+  backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--rule);
+}
+.bar .wrap{display:flex;align-items:center;justify-content:space-between;gap:16px;padding-block:12px}
+.mark{font-family:var(--mono);font-size:13px;color:var(--ink);text-decoration:none;letter-spacing:.02em}
+.mark span{color:var(--accent)}
+.bar nav{display:flex;gap:20px;flex-wrap:wrap}
+.bar nav a{font-family:var(--mono);font-size:12.5px;color:var(--muted);text-decoration:none;letter-spacing:.04em}
+.bar nav a:hover{color:var(--ink)}
+@media (max-width:720px){.bar nav{display:none}}
+
+/* hero */
+.hero{padding-block:72px 56px}
+.kicker{font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin:0 0 20px}
+.kicker b{color:var(--accent);font-weight:500}
+h1{
+  font-family:var(--display);font-weight:800;
+  font-size:clamp(52px,10vw,120px);
+  line-height:.92;letter-spacing:-.035em;
+  margin:0;text-wrap:balance;
+}
+.lede{
+  font-size:clamp(18px,2.1vw,22px);line-height:1.5;
+  max-width:36em;margin:28px 0 0;color:var(--ink);text-wrap:pretty;
+}
+.lede em{font-style:normal;color:var(--muted)}
+.hero-links{display:flex;flex-wrap:wrap;gap:12px 24px;margin-top:28px;font-family:var(--mono);font-size:13.5px}
+
+/* result set */
+.result{
+  margin-top:56px;
+  background:var(--surface);
+  border:1px solid var(--rule);
+  border-radius:6px;
+  overflow:hidden;
+}
+.result-head{
+  display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;
+  padding:10px 16px;border-bottom:1px solid var(--rule);
+  font-family:var(--mono);font-size:12.5px;color:var(--muted);
+}
+.result-head code{color:var(--ink)}
+.result-head .kw{color:var(--accent)}
+.table-scroll{overflow-x:auto}
+table.rs{width:100%;border-collapse:collapse;font-family:var(--mono);font-size:13.5px;min-width:560px}
+.rs th{
+  text-align:left;font-weight:500;color:var(--faint);
+  padding:10px 16px;border-bottom:1px dashed var(--rule);
+  font-size:12px;letter-spacing:.04em;
+}
+.rs td{padding:11px 16px;border-bottom:1px solid var(--rule);vertical-align:baseline}
+.rs tr:last-child td{border-bottom:0}
+.rs td.v{
+  font-family:var(--display);font-weight:700;font-size:26px;letter-spacing:-.02em;
+  color:var(--ink);white-space:nowrap;font-variant-numeric:tabular-nums;text-align:right;
+  width:1%;
+}
+.rs th.v{text-align:right}
+.rs td.m{color:var(--ink)}
+.rs td.c{color:var(--muted)}
+.result-foot{padding:10px 16px;border-top:1px dashed var(--rule);font-family:var(--mono);font-size:12.5px;color:var(--faint)}
+.caret{display:inline-block;width:.55em;height:1.05em;background:var(--accent);vertical-align:-2px;margin-left:4px;animation:blink 1.1s steps(1) infinite}
+@keyframes blink{50%{opacity:0}}
+@media (prefers-reduced-motion: reduce){.caret{animation:none}}
+
+/* sections */
+section.block{border-top:1px solid var(--rule);padding-block:56px}
+.grid{display:grid;grid-template-columns:200px minmax(0,1fr);gap:24px 48px}
+@media (max-width:760px){.grid{grid-template-columns:1fr;gap:20px}}
+.label{
+  font-family:var(--mono);font-size:12.5px;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--muted);margin:6px 0 0;
+}
+.label small{display:block;text-transform:none;letter-spacing:0;color:var(--faint);margin-top:6px;font-size:12px}
+h2{font-family:var(--display);font-weight:700;font-size:clamp(26px,3.2vw,34px);letter-spacing:-.02em;line-height:1.1;margin:0 0 8px;text-wrap:balance}
+h3{font-family:var(--display);font-weight:700;font-size:21px;letter-spacing:-.01em;line-height:1.25;margin:0;text-wrap:balance}
+p{margin:0}
+.prose{max-width:62ch;display:grid;gap:14px;color:var(--ink)}
+.prose p{text-wrap:pretty}
+
+/* entries */
+.entries{display:grid;gap:40px}
+.entry{display:grid;grid-template-columns:132px minmax(0,1fr);gap:4px 28px}
+@media (max-width:560px){.entry{grid-template-columns:1fr}}
+.when{font-family:var(--mono);font-size:12.5px;color:var(--muted);font-variant-numeric:tabular-nums;padding-top:5px;line-height:1.5}
+.where{color:var(--muted);font-size:15px;margin-top:2px}
+.where b{color:var(--ink);font-weight:500}
+ul.points{margin:14px 0 0;padding:0;list-style:none;display:grid;gap:10px;max-width:66ch}
+ul.points li{position:relative;padding-left:20px;text-wrap:pretty}
+ul.points li::before{content:"";position:absolute;left:2px;top:.72em;width:8px;height:1px;background:var(--faint)}
+.tags{display:flex;flex-wrap:wrap;gap:6px;margin-top:14px}
+.tag{font-family:var(--mono);font-size:12px;color:var(--muted);border:1px solid var(--rule);border-radius:3px;padding:2px 7px;background:var(--surface)}
+
+/* papers */
+.paper{display:grid;gap:10px;padding-bottom:36px;border-bottom:1px dashed var(--rule)}
+.paper:last-child{padding-bottom:0;border-bottom:0}
+.venue{font-family:var(--mono);font-size:12.5px;color:var(--accent);letter-spacing:.02em}
+.authors{font-size:14.5px;color:var(--muted)}
+.authors b{color:var(--ink);font-weight:600}
+.scripts{
+  display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:4px;
+  font-size:17px;color:var(--ink);
+  font-family:var(--body),"Noto Sans Devanagari","Noto Sans Bengali","Noto Sans Tamil","Noto Sans Telugu",sans-serif;
+}
+.scripts span{white-space:nowrap}
+.scripts span+span::before{content:"·";color:var(--faint);margin-right:14px}
+.links{display:flex;flex-wrap:wrap;gap:8px 20px;font-family:var(--mono);font-size:13px}
+
+/* status pill */
+.pill{
+  display:inline-block;font-family:var(--mono);font-size:11.5px;letter-spacing:.04em;
+  padding:2px 8px;border-radius:99px;vertical-align:3px;margin-left:8px;white-space:nowrap;
+}
+.pill.wip{color:var(--wip);background:var(--wip-soft)}
+
+/* projects */
+.cards{display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:16px}
+.card{background:var(--surface);border:1px solid var(--rule);border-radius:6px;padding:20px;display:grid;gap:10px;align-content:start}
+.card h3{font-size:18px}
+.card p{color:var(--muted);font-size:15px;text-wrap:pretty}
+
+/* skills */
+dl.skills{display:grid;grid-template-columns:150px minmax(0,1fr);gap:14px 24px;margin:0}
+@media (max-width:560px){dl.skills{grid-template-columns:1fr;gap:4px}dl.skills dd{margin-bottom:12px}}
+dl.skills dt{font-family:var(--mono);font-size:12.5px;color:var(--muted);letter-spacing:.04em;padding-top:3px}
+dl.skills dd{margin:0}
+
+/* recognition list */
+ul.plain{margin:0;padding:0;list-style:none;display:grid;gap:14px;max-width:66ch}
+ul.plain li{display:grid;grid-template-columns:64px minmax(0,1fr);gap:16px}
+ul.plain .yr{font-family:var(--mono);font-size:12.5px;color:var(--muted);padding-top:3px;font-variant-numeric:tabular-nums}
+
+/* contact */
+.contact h2{font-size:clamp(34px,5vw,56px);letter-spacing:-.03em}
+.contact-rows{display:grid;gap:10px;margin-top:20px;font-family:var(--mono);font-size:14px}
+.contact-rows div{display:grid;grid-template-columns:96px minmax(0,1fr);gap:16px}
+.contact-rows span{color:var(--muted)}
+footer{border-top:1px solid var(--rule);padding-block:24px 40px;font-family:var(--mono);font-size:12px;color:var(--faint)}
+</style>
+</head>
+<body>
+
+<header class="bar">
+  <div class="wrap">
+    <a class="mark" href="#top">aviral<span>.</span>dawar</a>
+    <nav aria-label="Sections">
+      <a href="#experience">experience</a>
+      <a href="#research">research</a>
+      <a href="#current">current work</a>
+      <a href="#projects">projects</a>
+      <a href="#skills">skills</a>
+      <a href="#contact">contact</a>
+    </nav>
+  </div>
+</header>
+
+<main id="top">
+  <div class="wrap hero">
+    <p class="kicker"><b>●</b>&nbsp; Backend &amp; AI/ML engineer · Bengaluru</p>
+    <h1>Aviral<br>Dawar</h1>
+    <p class="lede">I build Java services and high-concurrency workloads in Oracle's Database Group, and I research how reliably large language models handle SQL, law and science across languages. <em>Databases on one side, LLM evaluation on the other, and a lot of Python in between.</em></p>
+    <div class="hero-links">
+      <a href="#experience">Experience ↓</a>
+      <a href="https://arxiv.org/abs/2604.13686" target="_blank" rel="noopener">IndicDB on arXiv ↗</a>
+      <a href="https://github.com/AviralDawar" target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+
+    <figure class="result" aria-label="Selected figures from Aviral's work" style="margin-left:0;margin-right:0;margin-bottom:0">
+      <div class="result-head">
+        <code><span class="kw">SELECT</span> metric, value, context <span class="kw">FROM</span> work <span class="kw">ORDER BY</span> year <span class="kw">DESC</span>;</code>
+        <span>highlights</span>
+      </div>
+      <div class="table-scroll">
+        <table class="rs">
+          <thead><tr><th class="v">value</th><th>metric</th><th>context</th></tr></thead>
+          <tbody>
+            <tr><td class="v">15,617</td><td class="m">Text-to-SQL tasks in 7 languages</td><td class="c">IndicDB benchmark, 2026</td></tr>
+            <tr><td class="v">20+</td><td class="m">database features under load</td><td class="c">performance &amp; reliability frameworks, Oracle</td></tr>
+            <tr><td class="v">120+</td><td class="m">backend APIs shipped</td><td class="c">TypeScript / PostgreSQL, Propacity</td></tr>
+            <tr><td class="v">10M+</td><td class="m">events processed per day</td><td class="c">Spring Boot on OCI, 2023</td></tr>
+            <tr><td class="v">30+</td><td class="m">cloud regions deployed</td><td class="c">Docker · Kubernetes · Helm</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="result-foot">(5 rows)<span class="caret" aria-hidden="true"></span></div>
+    </figure>
+  </div>
+
+  <!-- About -->
+  <section class="block" id="about">
+    <div class="wrap grid">
+      <p class="label">About</p>
+      <div class="prose">
+        <p>My day job is database platform engineering: services and multi-tier workloads that push Oracle Database hard on concurrency, latency and failure behaviour, so problems show up before customers find them. Before Oracle I worked on event pipelines at Oracle Cloud Infrastructure and on a CRM backend at a real-estate startup.</p>
+        <p>Alongside that I do research. I co-authored a multilingual Text-to-SQL benchmark for Indian languages and an ICML 2026 workshop paper on whether LLM legal verdicts stay stable when irrelevant details change. I'm currently building benchmark infrastructure for scientific reasoning and for difficulty-controlled SQL generation.</p>
+        <p>I'm looking for SDE I / II roles in backend and AI/ML engineering, in Bengaluru or Hyderabad.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience -->
+  <section class="block" id="experience">
+    <div class="wrap grid">
+      <p class="label">Experience</p>
+      <div class="entries">
+
+        <article class="entry">
+          <div class="when">Jun 2024 –<br>present</div>
+          <div>
+            <h3>Member of Technical Staff</h3>
+            <p class="where"><b>Oracle</b> · Database Group · Bengaluru</p>
+            <ul class="points">
+              <li>Design multi-tier workload applications for Linux and Windows that drive Oracle Database under high concurrency, focused on performance and scalability.</li>
+              <li>Build Micronaut and Spring services and SQL-intensive workloads that have surfaced dozens of high-impact database issues ahead of release.</li>
+              <li>Built an organization-wide Spring Boot tool that shows the live transactions tied to recent code changes, shortening the feedback loop for engineers across the group.</li>
+              <li>Developed Java/JDBC, Python and C#/ODP.NET frameworks that measure latency, stress and failure behaviour across 20+ database features.</li>
+              <li>Led my team's move to AI-assisted engineering workflows by building internal Codex skills and contributing to MCP integrations that automate engineering artifacts.</li>
+            </ul>
+            <div class="tags"><span class="tag">Java</span><span class="tag">Spring</span><span class="tag">Micronaut</span><span class="tag">Oracle Database</span><span class="tag">JDBC</span><span class="tag">C# / ODP.NET</span><span class="tag">Python</span><span class="tag">MCP</span></div>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="when">Dec 2023 –<br>May 2024</div>
+          <div>
+            <h3>Backend Engineering Intern</h3>
+            <p class="where"><b>Propacity</b> · New Delhi</p>
+            <ul class="points">
+              <li>One of three backend engineers building CRM capabilities for a real-estate startup.</li>
+              <li>Independently designed and shipped 120+ TypeScript/PostgreSQL APIs for lead management.</li>
+              <li>Integrated WhatsApp, Facebook, IVR, Zoom and AWS APIs into the lead pipeline.</li>
+            </ul>
+            <div class="tags"><span class="tag">TypeScript</span><span class="tag">Node.js</span><span class="tag">PostgreSQL</span><span class="tag">AWS</span></div>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="when">May 2023 –<br>Jul 2023</div>
+          <div>
+            <h3>Summer Project Intern</h3>
+            <p class="where"><b>Oracle Cloud Infrastructure</b> · Bengaluru</p>
+            <ul class="points">
+              <li>Designed and built a Java/Spring Boot microservice that processes and transforms roughly 10M+ events a day from OCI products.</li>
+              <li>Converted Kafka CloudEvents into the OCI logging schema, giving 100+ services real-time visibility in the console.</li>
+              <li>Deployed it with Docker, Kubernetes and Helm across 30+ OCI regions.</li>
+            </ul>
+            <div class="tags"><span class="tag">Java</span><span class="tag">Spring Boot</span><span class="tag">Kafka</span><span class="tag">Kubernetes</span><span class="tag">Helm</span><span class="tag">OCI</span></div>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="when">Jan 2023 –<br>Jan 2024</div>
+          <div>
+            <h3>Undergraduate ML Researcher</h3>
+            <p class="where"><b>InTellicom Lab, IIIT Delhi</b> · advised by Dr. Ranjitha Prasad</p>
+            <ul class="points">
+              <li>Extended a two-treatment counterfactual model to neural survival analysis with multiple treatments, for personalised treatment recommendation. Completed as my undergraduate thesis.</li>
+            </ul>
+            <div class="tags"><span class="tag">PyTorch</span><span class="tag">Causal inference</span><span class="tag">Survival analysis</span></div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Research -->
+  <section class="block" id="research">
+    <div class="wrap grid">
+      <p class="label">Research<small>Published work</small></p>
+      <div class="entries">
+
+        <article class="paper">
+          <p class="venue">arXiv preprint · 2026</p>
+          <h3>IndicDB: Benchmarking Multilingual Text-to-SQL Capabilities in Indian Languages</h3>
+          <p class="authors"><b>Aviral Dawar</b>, Roshan Karanth, Vikram Goyal, Dhruv Kumar</p>
+          <p class="prose">A Text-to-SQL benchmark built from Indian public data: 20 databases, 237 tables and 15,617 tasks. An Architect–Auditor–Refiner agent pipeline turns denormalised administrative data into relational schemas averaging 11.85 tables per database, with joins up to six deep. Across the LLMs evaluated, execution accuracy drops by 9 points on average from English to Indic-language questions.</p>
+          <p class="scripts" aria-label="Languages covered"><span>English</span><span lang="hi">हिन्दी</span><span lang="bn">বাংলা</span><span lang="ta">தமிழ்</span><span lang="te">తెలుగు</span><span lang="mr">मराठी</span><span>Hinglish</span></p>
+          <div class="links"><a href="https://arxiv.org/abs/2604.13686" target="_blank" rel="noopener">arXiv:2604.13686 ↗</a></div>
+        </article>
+
+        <article class="paper">
+          <p class="venue">ICML 2026 · AI for Law Workshop · poster</p>
+          <h3>AFL-Law: Authority, Framing, and Language Invariance Testing in Large Language Models</h3>
+          <p class="authors">Chehak Malhotra, <b>Aviral Dawar</b></p>
+          <p class="prose">Does an LLM's legal verdict change when you add details that shouldn't matter? We ran 100 Indian Supreme Court cases through five model conditions in English, Hindi, Chinese and Spanish, varying authority cues and persuasive framing. Authority bias reached 37% and framing sensitivity reached 100% in some conditions.</p>
+          <div class="links">
+            <a href="https://icml.cc/virtual/2026/80611" target="_blank" rel="noopener">ICML page ↗</a>
+            <a href="https://openreview.net/forum?id=hC7hmT7eNy" target="_blank" rel="noopener">OpenReview ↗</a>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Current work -->
+  <section class="block" id="current">
+    <div class="wrap grid">
+      <p class="label">Current work<small>Research in progress</small></p>
+      <div class="entries">
+
+        <article class="entry">
+          <div class="when">2026</div>
+          <div>
+            <h3>Scientific-reasoning benchmark <span class="pill wip">in progress</span></h3>
+            <p class="where">Research collaboration</p>
+            <ul class="points">
+              <li>Built much of a data pipeline over three OpenStax textbooks: 6,000+ extracted questions and 3,450 curated reference answers in Biology and Physics.</li>
+              <li>Designed a controlled comparison of five semantic answer-grading metrics over 1,350 answer pairs; AlignScore separated correct from wrong answers best.</li>
+              <li>Built a concept-dependency graph of ~3,900 concepts and 12,000 edges, using a locally served open-weight 120B model on vLLM to judge prerequisite relationships.</li>
+              <li>Wrote multimodal ingestion that recovers worked solutions from Word documents, Office Math, legacy equation objects and images into structured text and LaTeX.</li>
+            </ul>
+            <div class="tags"><span class="tag">Python</span><span class="tag">vLLM</span><span class="tag">NetworkX</span><span class="tag">Parquet</span><span class="tag">Streamlit</span><span class="tag">AlignScore</span></div>
+          </div>
+        </article>
+
+        <article class="entry">
+          <div class="when">2026</div>
+          <div>
+            <h3>SQL-CD: controlled-difficulty Text-to-SQL <span class="pill wip">prototype</span></h3>
+            <p class="where">Research prototype</p>
+            <ul class="points">
+              <li>Extending a schema-aware SQL generator so difficulty is set explicitly: a typed vector controls joins, filters, grouping, aggregation, HAVING, ordering and join topology.</li>
+              <li>Built query skeletons with legal candidate sets, cached and LLM-assisted slot filling, and a hard gate that rejects any query whose actual structure misses the requested profile.</li>
+              <li>Added grain analysis over the primary-key/foreign-key graph so aggregates aren't inflated by join fan-out, plus per-column statistics that bound what each clause can express.</li>
+            </ul>
+            <div class="tags"><span class="tag">SQLGlot</span><span class="tag">PostgreSQL</span><span class="tag">NetworkX</span><span class="tag">LLM APIs</span></div>
+          </div>
+        </article>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Projects -->
+  <section class="block" id="projects">
+    <div class="wrap grid">
+      <p class="label">Earlier projects</p>
+      <div class="cards">
+        <article class="card">
+          <h3>RL resource allocation</h3>
+          <p>A React, Django and MongoDB platform that uses actor-critic reinforcement learning to allocate scarce resources such as hospital beds and vaccines.</p>
+          <div class="links"><a href="https://github.com/AviralDawar/RLPnP-Aviral-Prachi-" target="_blank" rel="noopener">Repository ↗</a></div>
+        </article>
+        <article class="card">
+          <h3>Federated learning optimisers</h3>
+          <p>Implemented AdaGrad and AdaDelta in the PFLlib federated-learning library with PyTorch and compared them against SGD across hyperparameter settings.</p>
+        </article>
+        <article class="card">
+          <h3>Infant mortality in Rwanda</h3>
+          <p>Modelled infant-mortality risk with logistic regression, random forests and MLPs, and ranked contributing factors with causal feature-importance methods.</p>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills -->
+  <section class="block" id="skills">
+    <div class="wrap grid">
+      <p class="label">Skills</p>
+      <dl class="skills">
+        <dt>Languages</dt><dd>Java, Python, TypeScript, SQL, C#, C/C++, JavaScript</dd>
+        <dt>Backend</dt><dd>Spring Boot, Micronaut, Node.js, Express, Django, REST APIs, Kafka</dd>
+        <dt>Data</dt><dd>Oracle Database, PostgreSQL, PL/SQL, SQLAlchemy, pandas, PyArrow, Parquet</dd>
+        <dt>Cloud &amp; infra</dt><dd>OCI, AWS, Docker, Kubernetes, Helm, Linux, Windows</dd>
+        <dt>AI / ML</dt><dd>LLM evaluation, Text-to-SQL, agentic pipelines, vLLM, PyTorch, scikit-learn, reinforcement learning, causal inference</dd>
+      </dl>
+    </div>
+  </section>
+
+  <!-- Education & recognition -->
+  <section class="block" id="education">
+    <div class="wrap grid">
+      <p class="label">Education &amp; recognition</p>
+      <ul class="plain">
+        <li><span class="yr">2020–24</span><span><b>B.Tech, Indraprastha Institute of Information Technology Delhi (IIIT Delhi)</b></span></li>
+        <li><span class="yr">2023</span><span>Selected for Amazon ML Summer School</span></li>
+        <li><span class="yr">IIITD</span><span>Mentored and taught Physics and Literature to 150 students at an IIIT Delhi summer camp</span></li>
+        <li><span class="yr">JEE</span><span>JEE Main: 99.39 percentile (AIR 7009) among more than a million candidates</span></li>
+      </ul>
+    </div>
+  </section>
+
+  <!-- Contact -->
+  <section class="block contact" id="contact">
+    <div class="wrap grid">
+      <p class="label">Contact</p>
+      <div>
+        <h2>Let's talk about backend or AI/ML roles.</h2>
+        <div class="contact-rows">
+          <div><span>github</span><a href="https://github.com/AviralDawar" target="_blank" rel="noopener">github.com/AviralDawar</a></div>
+          <div><span>papers</span><a href="https://arxiv.org/abs/2604.13686" target="_blank" rel="noopener">arxiv.org/abs/2604.13686</a></div>
+          <div><span>based in</span><p>Bengaluru, India</p></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">Aviral Dawar · updated September 2026</div>
+</footer>
+</body>
+</html>
